@@ -1,4 +1,4 @@
-#include "GhostTracker.h"
+#include "GhostTracker.cpp"
 
 
 int main(int argc, char **argv) {
@@ -47,10 +47,10 @@ int main(int argc, char **argv) {
     int n, m, k;
     cin>>n>>m>>k;
 
-    vector<vector<int>> *grid = new vector<vector<int>> (n);
-
+    vector<vector<double>> *grid = new vector<vector<double>> (n);
+    double init_prob = 1.0/(n*m-k);
     for (int l=0;l<n;l++) {
-        grid->at (l) = vector<int>(m, 1);
+        grid->at (l) = vector<double>(m, init_prob);
     }
 
     int i, j;
@@ -59,11 +59,15 @@ int main(int argc, char **argv) {
         grid->at(i).at(j) = 0; 
     } 
 
-    while(cin.peek() != char_traits<char>::eof()) {
-        char s;
-        cin>>s;
-        cout<<s;
-    } 
+    // while(cin.peek() != char_traits<char>::eof()) {
+    //     char s;
+    //     cin>>s;
+    //     cout<<s;
+    // } 
+
+    GhostTracker gtk(grid, k);
+    gtk.calculate_bstate_p();
+    gtk.printBstate_t();
 
 
     // redirecting cout and cin to console 
@@ -79,7 +83,11 @@ int main(int argc, char **argv) {
 
     for (int i=0;i<n;i++) {
         for (int j=0;j<m;j++) {
-            cout<<grid->at(i).at(j)<<" ";
+            cout<<std::fixed<<setprecision(4)<< grid->at(i).at(j)<<" | ";
+        }
+        cout<<endl;
+        for (int j=0;j<m;j++) {
+            cout<< "======"<<" | ";
         }
         cout<<endl;
     }
