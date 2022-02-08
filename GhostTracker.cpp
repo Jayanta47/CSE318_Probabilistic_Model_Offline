@@ -151,8 +151,53 @@ void GhostTracker::calculate_bstate_p(){
     }
 }
 
-void GhostTracker::update_curr_bstate(int row, int col, bool isCasperPresent) {
+bool GhostTracker::update_curr_bstate(int row, int col, bool isCasperPresent) {
+    if (row<0 || row>=n_row || col<0 || col>n_column) return false;
 
+    bool visited[n_row][n_column];
+    for (int i=0;i<n_row;i++) {
+        for (int j=0;j<n_column;j++) {
+            visited[i][j] = false;
+        }
+    }
+    double multiplier = isCasperPresent? true_positive : (1.0-true_positive);
+
+    for (int i=row-1;i<=row+1;i++) {
+        for (int j=col-1;j<=col+1;j++) {
+            if (i<0||i>=n_row||j<0||j>n_column) continue;
+            br_grid->at(i).at(j) = br_grid->at(i).at(j)*multiplier;
+            visited[i][j] = true;
+        }
+    }
+    double total_sum = 0.0;
+    for (int i=0;i<n_row;i++) {
+        for (int j=0;j<n_column;j++) {
+            if (!visited[i][j]) 
+                br_grid->at(i).at(j) = br_grid->at(i).at(j)*(1.0-multiplier);
+            total_sum += br_grid->at(i).at(j);
+        }
+    }
+
+    for (int i=0;i<n_row;i++) {
+        for (int j=0;j<n_column;j++) {
+            br_grid->at(i).at(j) = br_grid->at(i).at(j)/(total_sum);
+        }
+    }
+
+    cout<<"Updated Belief state"<<endl;
+    for (int i=0;i<n_row;i++) {
+        for (int j=0;j<n_column;j++) {
+            cout<<std::fixed<<setprecision(5)<< br_grid->at(i).at(j)<<" | ";
+        }
+    cout<<endl;
+    for (int j=0;j<n_column;j++) {
+        cout<< "======="<<" | ";
+    }
+    cout<<endl;
+    }
+    cout<<endl;
+
+    return true;
 }
 
 void GhostTracker::printBstate_t () {
@@ -168,6 +213,7 @@ void GhostTracker::printBstate_t () {
         }
         cout<<endl;
         }
+        cout<<endl;
     }
 }
 

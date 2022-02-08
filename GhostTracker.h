@@ -33,7 +33,7 @@ private:
 public:
     GhostTracker(vector<vector<double>> *br_grid, int num_obs);
     void calculate_bstate_p();
-    void update_curr_bstate(int row, int col, bool isCasperPresent);
+    bool update_curr_bstate(int row, int col, bool isCasperPresent);
     void printBstate_t ();
     ~GhostTracker();
 };

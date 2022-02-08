@@ -59,15 +59,28 @@ int main(int argc, char **argv) {
         grid->at(i).at(j) = 0; 
     } 
 
-    // while(cin.peek() != char_traits<char>::eof()) {
-    //     char s;
-    //     cin>>s;
-    //     cout<<s;
-    // } 
-
     GhostTracker gtk(grid, k);
-    gtk.calculate_bstate_p();
-    gtk.printBstate_t();
+
+    while(cin.peek() != char_traits<char>::eof()) {
+        char s;
+        cin>>s;
+        if (s == 'R') {
+            int row, col, sensorData;
+            cin>>row>>col>>sensorData;
+            gtk.calculate_bstate_p();
+            gtk.printBstate_t();
+            gtk.update_curr_bstate (row, col, sensorData==1);
+        }
+        else if (s== 'C') {
+            continue;
+        }
+        else {
+            printf("Invalid command %c\n", s);
+        }
+    } 
+
+    
+    
 
 
     // redirecting cout and cin to console 
