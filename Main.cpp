@@ -12,10 +12,7 @@ int main(int argc, char **argv) {
     streambuf *old_stream_buf_cin;
     streambuf *old_stream_buf_cout;
 
-    if (argc<2) {
-        
-    }
-    else {
+    if (argc >= 2) {
         if (argc != 3) {
             cout<<"Insufficient command line arguments."<<endl;
             cout<<"Format: [object file] [input file name] [output file name]"<<endl;
@@ -33,15 +30,6 @@ int main(int argc, char **argv) {
         cout.rdbuf (outFile->rdbuf ());
         cin.rdbuf (inpFile->rdbuf ());
     }
-    
-    // streambuf* oldCoutStreamBuf = cout.rdbuf();
-    // ostringstream strCout;
-    // cout.rdbuf (strCout.rdbuf ());
-
-    // cout<< "Hello World";
-
-    // cout.rdbuf (oldCoutStreamBuf);
-    // cout<<strCout.str()<<endl;
 
     
     int n, m, k;
@@ -73,6 +61,10 @@ int main(int argc, char **argv) {
         }
         else if (s== 'C') {
             continue;
+        }
+        else if (s == 'Q') {
+            cout<< "Bye Casper!" <<endl;
+            exit(0);
         }
         else {
             printf("Invalid command %c\n", s);
