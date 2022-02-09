@@ -2,16 +2,8 @@
 
 
 int main(int argc, char **argv) {
-
-    string *inputFileName = nullptr;
-    string *outputFileName = nullptr;
-
-    fstream *inpFile;
-    fstream *outFile;
-
-    streambuf *old_stream_buf_cin;
-    streambuf *old_stream_buf_cout;
-
+    auto start_time =chrono::high_resolution_clock::now();
+    consoleStream = true;
     if (argc >= 2) {
         if (argc != 3) {
             cout<<"Insufficient command line arguments."<<endl;
@@ -25,10 +17,7 @@ int main(int argc, char **argv) {
         inpFile->open (*inputFileName, ios::in);
         outFile->open (*outputFileName, ios::out);
 
-        old_stream_buf_cin = cin.rdbuf();
-        old_stream_buf_cout = cout.rdbuf();
-        cout.rdbuf (outFile->rdbuf ());
-        cin.rdbuf (inpFile->rdbuf ());
+        redirectStream();
     }
 
     
@@ -46,25 +35,31 @@ int main(int argc, char **argv) {
         cin>>i>>j;
         grid->at(i).at(j) = 0; 
     } 
-
+    
     GhostTracker gtk(grid, k);
-
+    gtk.printState();
+    
     while(cin.peek() != char_traits<char>::eof()) {
         char s;
         cin>>s;
+        
         if (s == 'R') {
             int row, col, sensorData;
             cin>>row>>col>>sensorData;
             gtk.calculate_bstate_p();
             gtk.printBstate_t();
+            cout<<"Received sensor Reading at cell ("<<row<<","<<col<<"): "<<(sensorData==1?"Casper Present":"Casper Absent")<<endl;
+            
             gtk.update_curr_bstate (row, col, sensorData==1);
+            
+            gtk.printState();
         }
         else if (s== 'C') {
-            continue;
+            gtk.printLikelyPos();
         }
         else if (s == 'Q') {
             cout<< "Bye Casper!" <<endl;
-            exit(0);
+            break;
         }
         else {
             printf("Invalid command %c\n", s);
@@ -74,27 +69,9 @@ int main(int argc, char **argv) {
     
     
 
-
-    // redirecting cout and cin to console 
-    if (old_stream_buf_cin != nullptr) {
-        cin.rdbuf (old_stream_buf_cin);
-    }
-
-    if (old_stream_buf_cout != nullptr) {
-        cout.rdbuf (old_stream_buf_cout);
-    }
-    cout<< *inputFileName << " " <<*outputFileName<<endl;
-    cout<<n<<" "<<m<<" "<<k<<endl;
-
-    for (int i=0;i<n;i++) {
-        for (int j=0;j<m;j++) {
-            cout<<std::fixed<<setprecision(4)<< grid->at(i).at(j)<<" | ";
-        }
-        cout<<endl;
-        for (int j=0;j<m;j++) {
-            cout<< "======"<<" | ";
-        }
-        cout<<endl;
-    }
-
+    redirectStream();
+    auto end_time = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::microseconds>(end_time - start_time);
+    cout<<"Simulation Run Successfully"<<endl<<"Total Time: "<<duration.count()<< " ms"<<endl;
+    return 0;
 }
