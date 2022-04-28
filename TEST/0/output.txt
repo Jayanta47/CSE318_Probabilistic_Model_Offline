@@ -1,0 +1,9 @@
+Initial Probability, Time: 0
+0.33333 | 0.33333 | 0.33333 | 
+======= | ======= | ======= | 
+
+Received sensor Reading at cell (0,2): Casper Present
+Probability Update, Time: 1
+0.03811 | 0.74596 | 0.21594 | 
+======= | ======= | ======= | 
+

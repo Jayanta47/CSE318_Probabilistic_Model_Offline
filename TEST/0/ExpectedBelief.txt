@@ -1,0 +1,4 @@
+Calculated expected belief state at time = 0
+0.18333 | 0.63333 | 0.18333 | 
+======= | ======= | ======= | 
+

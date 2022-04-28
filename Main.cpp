@@ -1,10 +1,22 @@
-#include "GhostTracker.cpp"
+#include "GhostTracker.h"
 
+bool consoleStream;
+
+streambuf *old_stream_buf_cin;
+streambuf *old_stream_buf_cout;
+
+string *inputFileName = nullptr;
+string *outputFileName = nullptr;
+
+fstream *inpFile;
+fstream *outFile;
 
 int main(int argc, char **argv) {
     auto start_time =chrono::high_resolution_clock::now();
     consoleStream = true;
+    
     if (argc >= 2) {
+        
         if (argc != 3) {
             cout<<"Insufficient command line arguments."<<endl;
             cout<<"Format: [object file] [input file name] [output file name]"<<endl;
@@ -15,15 +27,17 @@ int main(int argc, char **argv) {
         inpFile = new fstream();
         outFile = new fstream();
         inpFile->open (*inputFileName, ios::in);
+        if (!inpFile->is_open()) printf("error in opening input file\n");
+        if (!outFile->is_open()) printf("error in opening output file\n");
         outFile->open (*outputFileName, ios::out);
-
+        
         redirectStream();
     }
 
     
     int n, m, k;
     cin>>n>>m>>k;
-
+    
     vector<vector<double>> *grid = new vector<vector<double>> (n);
     double init_prob = 1.0/(n*m-k);
     for (int l=0;l<n;l++) {

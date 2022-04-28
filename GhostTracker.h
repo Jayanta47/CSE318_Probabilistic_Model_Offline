@@ -1,5 +1,5 @@
-#ifndef GHOST_TRACKER_H
-#define GHOST_TRACKER_H
+#ifndef GHOSTTRACKER_H
+#define GHOSTTRACKER_H
 
 #include<iostream>
 #include<vector>
@@ -15,16 +15,16 @@
 
 using namespace std;
 
-bool consoleStream;
+extern bool consoleStream;
 
-streambuf *old_stream_buf_cin;
-streambuf *old_stream_buf_cout;
+extern streambuf *old_stream_buf_cin;
+extern streambuf *old_stream_buf_cout;
 
-string *inputFileName = nullptr;
-string *outputFileName = nullptr;
+extern string *inputFileName;
+extern string *outputFileName;
 
-fstream *inpFile;
-fstream *outFile;
+extern fstream *inpFile;
+extern fstream *outFile;
 
 struct blockInfo {
     int edge_adj_blocks;
